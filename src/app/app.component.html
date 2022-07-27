@@ -6,12 +6,13 @@
             <input formControlName="phoneNumber" id="phoneNumber" type="text" class="form-control">
             <div *ngIf="f.phoneNumber.touched && f.phoneNumber.invalid">
                 <div class="alert alert-warning" *ngIf="f.phoneNumber.errors.required">Phone Number is required.</div>
-                <div class="alert alert-warning" *ngIf="f.phoneNumber.errors.pattern">Please enter a 5 digit Phone Number.</div>
+                <div class="alert alert-warning" *ngIf="f.phoneNumber.errors.pattern">Please enter a 10 digit Phone Number.</div>
             </div>
         </div>
         <button id="submit-btn" class="btn btn-primary" type="submit" [disabled]="!phoneNumberForm.valid">Submit</button>
     </form>
-    <h4 *ngIf="phoneNumbers.length>0">Total Count is {{phoneNumbers.length}}</h4>
+    <div *ngIf="phoneNumbers.length>0">
+    <h4 >Total Count is {{phoneNumbers.length}}</h4>
     <div id="list">
         <div *ngFor="let page of pageOfItems">{{page}}</div>
     </div>
@@ -19,4 +20,5 @@
     <div class="text-right">
         <jw-pagination [items]="phoneNumbers" (changePage)="onChangePage($event)"></jw-pagination>
     </div>
+</div>
 </div>

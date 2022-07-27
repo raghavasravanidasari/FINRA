@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ApiService } from './app.service';
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
@@ -8,11 +9,12 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 export class AppComponent {
 	phoneNumbers = [];
 	p: Number = 1;
-	count: Number = 5;
+	data;
+	count: Number = 10;
 	pageOfItems: Array<any>;
 
 	phoneNumberForm: FormGroup = new FormGroup({});
-	constructor(private fb: FormBuilder) {
+	constructor(private fb: FormBuilder, private apiService: ApiService) {
 		this.phoneNumberForm = fb.group({
 			phoneNumber: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{5}$")]]
 		})
@@ -31,6 +33,7 @@ export class AppComponent {
 			que.shift();
 			if (str.length == this.phoneNumberForm.controls.phoneNumber.value.length) {
 				result.push(str);
+				this.apiService.postData(str);
 			} else {
 				let s = Number(this.phoneNumberForm.controls.phoneNumber.value.charAt(str.length));
 				let val = table[s];
@@ -40,11 +43,16 @@ export class AppComponent {
 				}
 			}
 		}
+	//	this.apiService.postCount(result.length+1);
 		this.phoneNumbers = result;
 	}
 
 	onChangePage(pageOfItems: Array<any>) {
 		this.pageOfItems = pageOfItems;
+	}
+	// Fetch Data from server - We can use this function for making service call of each page click
+	displayData(page,limit){
+		this.apiService.getData(page,limit).subscribe(data => {this.data = data})
 	}
 
 }
